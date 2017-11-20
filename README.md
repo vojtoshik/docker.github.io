@@ -1,30 +1,14 @@
-# docs-base
+# docs-builder
 
-This is the source for [docs/docker.github.io:docs-base](https://hub.docker.com/r/docs/docker.github.io/tags/).
+This builds a base image that is used to build all of the doc archives including
+master. It unifies the Github Pages version across all derivative images.
 
-The docs-base Dockerfile includes:
+> **Note**: This image does not include the Nginx config. To get that, you
+> need to use the `docs/docker.github.io:docs-config` image. To just get the
+> Nginx config from there, use a command such as:
+>
+> ```none
+> COPY --from=docs/docker.github.io:docs-config /conf/nginx-overrides.conf /etc/nginx/conf.d/
+> ```
+>
 
-- The GitHub Pages environment (w/Jekyll)
-- nginx
-- Builds of all previous versions of Docker's documentation
-
-Having this large amount of stuff that stays relatively static in a base image
-helps keep build times for the docs low as we can use Docker Cloud's caching
-when running auto-builds out of GitHub.
-
-While you would only see the docs archives by doing so, you can run docs-base
-locally and peruse by running:
-
-```
-docker run -ti -p 4000:4000 docs/docker.github.io:docs-base
-```
-
-The contents of docs-base will then be viewable in your browser at
-`localhost:4000`.
-
-## Reasons to update this branch
-
-- Changing the nginx configuration
-- Publishing a new docs archive, or anything else that stays static between
-  doc builds.
-- Updating the GitHub Pages version used in production to a newer release
